@@ -1,6 +1,4 @@
-import bytes.BytesWriterVisitor;
-import kafka.KafkaParser;
-import types.Int32;
+import handlers.Router;
 
 import java.net.ServerSocket;
 
@@ -12,9 +10,10 @@ public class Main {
     var kafkaParser = new KafkaParser(clientSocket.getInputStream());
     var message = kafkaParser.parseMessage();
 
-    var bytesWriterVisitor = new BytesWriterVisitor();
-    clientSocket.getOutputStream().write(bytesWriterVisitor.visitInt32(new Int32(0)));
-    clientSocket.getOutputStream().write(bytesWriterVisitor.visitInt32(message.header().correlationId()));
+    var responseMessage = new Router().route(message);
+
+    var kafkaWriter = new KafkaWriter(clientSocket.getOutputStream());
+    kafkaWriter.writeMessage(responseMessage);
 
     clientSocket.close();
     serverSocket.close();

@@ -1,11 +1,11 @@
-package kafka;
+package message.request;
 
 import types.CompactArray;
 import types.Int16;
 import types.Int32;
 import types.NullableString;
 
-public record KafkaHeader(
+public record KafkaRequestHeader(
   Int16 requestApiKey,
   Int16 requestApiVersion,
   Int32 correlationId,
