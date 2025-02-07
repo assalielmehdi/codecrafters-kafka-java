@@ -1,0 +1,1 @@
+![Progress](https://backend.codecrafters.io/progress/kafka/61e83127-f144-4f9d-8550-eb7eb52cebe9)
