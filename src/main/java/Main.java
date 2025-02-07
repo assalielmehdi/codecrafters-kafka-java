@@ -1,4 +1,7 @@
-import java.io.ByteArrayOutputStream;
+import bytes.BytesWriterVisitor;
+import kafka.KafkaParser;
+import types.Int32;
+
 import java.net.ServerSocket;
 
 public class Main {
@@ -6,15 +9,12 @@ public class Main {
     var serverSocket = new ServerSocket(Constants.SERVER_PORT);
     var clientSocket = serverSocket.accept();
 
-    var responseBuffer = new ByteArrayOutputStream();
+    var kafkaParser = new KafkaParser(clientSocket.getInputStream());
+    var message = kafkaParser.parseMessage();
 
-    var messageSize = 0;
-    var correlationId = 7;
-
-    ByteUtils.writeInt(responseBuffer, messageSize);
-    ByteUtils.writeInt(responseBuffer, correlationId);
-
-    clientSocket.getOutputStream().write(responseBuffer.toByteArray());
+    var bytesWriterVisitor = new BytesWriterVisitor();
+    clientSocket.getOutputStream().write(bytesWriterVisitor.visitInt32(new Int32(0)));
+    clientSocket.getOutputStream().write(bytesWriterVisitor.visitInt32(message.header().correlationId()));
 
     clientSocket.close();
     serverSocket.close();
