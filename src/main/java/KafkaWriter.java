@@ -39,6 +39,12 @@ public class KafkaWriter {
   private void writeApiVersionsBody(KafkaApiVersionsResponseBody body) {
     try {
       outputStream.write(bytesWriterVisitor.visitInt16(body.errorCode()));
+
+      for (var apiKey : body.apiKeys()) {
+        outputStream.write(bytesWriterVisitor.visitInt16(apiKey.apiKey()));
+        outputStream.write(bytesWriterVisitor.visitInt16(apiKey.minVersion()));
+        outputStream.write(bytesWriterVisitor.visitInt16(apiKey.maxVersion()));
+      }
     } catch (IOException ignored) {}
   }
 }
