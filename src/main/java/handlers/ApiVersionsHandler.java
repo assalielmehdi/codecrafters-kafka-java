@@ -17,20 +17,22 @@ public final class ApiVersionsHandler implements RequestHandler {
 
     if (apiVersion != 4) {
       return new KafkaResponseMessage(
-        new Int32(0),
+        new Int32(4 + 4 + 2),
         new KafkaResponseHeader(new Int32(correlationId)),
         new KafkaApiVersionsResponseBody(new Int16(35), List.of())
       );
     }
 
+    var body = buildBody();
+
     return new KafkaResponseMessage(
-      new Int32(0),
+      new Int32(4 + 4 + (2 + (2 + 2 + 2) * body.apiKeys().size())),
       new KafkaResponseHeader(new Int32(correlationId)),
-      buildResponse()
+      body
     );
   }
 
-  private KafkaApiVersionsResponseBody buildResponse() {
+  private KafkaApiVersionsResponseBody buildBody() {
     return new KafkaApiVersionsResponseBody(
       new Int16(0),
       List.of(new KafkaApiVersionsResponseBody.ApiKey(
