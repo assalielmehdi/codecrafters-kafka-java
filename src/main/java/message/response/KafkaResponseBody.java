@@ -1,4 +1,6 @@
 package message.response;
 
-public sealed interface KafkaResponseBody permits KafkaApiVersionsResponseBody {
+import bytes.ToBytes;
+
+public sealed interface KafkaResponseBody extends ToBytes permits KafkaApiVersionsResponseBody {
 }

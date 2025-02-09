@@ -6,10 +6,10 @@ import types.Int16;
 
 import java.util.Map;
 
-public class Router {
+public class RequestRouter {
   private final Map<Int16, RequestHandler> handlers;
 
-  public Router() {
+  public RequestRouter() {
     this.handlers = Map.of(
       new Int16(18), new ApiVersionsHandler()
     );
