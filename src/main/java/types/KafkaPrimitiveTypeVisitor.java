@@ -5,7 +5,13 @@ public interface KafkaPrimitiveTypeVisitor<T> {
 
   T visitInt32(Int32 int32);
 
+  T visitVarInt(VarInt varInt);
+
+  T visitUVarInt(UVarInt uVarInt);
+
   T visitNullableString(NullableString nullableString);
 
-  T visitCompactArray(CompactArray compactArray);
+  <V> T visitCompactArray(CompactArray<V> compactArray);
+
+  T visitTagBuffer(TagBuffer tagBuffer);
 }

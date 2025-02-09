@@ -1,8 +1,6 @@
 package bytes;
 
-import types.Int16;
-import types.Int32;
-import types.NullableString;
+import types.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +36,29 @@ public class BytesReader {
     }
   }
 
+  public VarInt readVarInt() {
+    try {
+      var value = readVarIntRaw();
+
+      value++;
+      value = (value >> 1) * ((value & 1) == 0 ? 1 : -1);
+
+      return new VarInt(value);
+    } catch (IOException e) {
+      return null;
+    }
+  }
+
+  public UVarInt readUVarInt() {
+    try {
+      var value = readVarIntRaw();
+
+      return new UVarInt(value);
+    } catch (IOException e) {
+      return null;
+    }
+  }
+
   public NullableString readNullableString() {
     try {
       var length = readInt16();
@@ -56,5 +77,19 @@ public class BytesReader {
     } catch (IOException e) {
       return null;
     }
+  }
+
+  private int readVarIntRaw() throws IOException {
+    var value = 0;
+    var b = inputStream.read();
+
+    while ((b & 0x80) != 0) {
+      value = (value << 7) | (b & 0x7F);
+      b = inputStream.read();
+    }
+
+    value = (value << 7) | b;
+
+    return value;
   }
 }

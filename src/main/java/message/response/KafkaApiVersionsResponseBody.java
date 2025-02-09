@@ -1,9 +1,10 @@
 package message.response;
 
+import types.CompactArray;
 import types.Int16;
+import types.Int32;
+import types.TagBuffer;
 
-import java.util.List;
-
-public record KafkaApiVersionsResponseBody(Int16 errorCode, List<ApiKey> apiKeys) implements KafkaResponseBody {
-  public record ApiKey(Int16 apiKey, Int16 minVersion, Int16 maxVersion) {}
+public record KafkaApiVersionsResponseBody(Int16 errorCode, CompactArray<ApiKey> apiKeys, Int32 throttleTimeMs, TagBuffer tagBuffer) implements KafkaResponseBody {
+  public record ApiKey(Int16 apiKey, Int16 minVersion, Int16 maxVersion, TagBuffer tagBuffer) {}
 }

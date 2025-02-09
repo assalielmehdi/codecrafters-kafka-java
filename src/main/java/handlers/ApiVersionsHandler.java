@@ -4,10 +4,10 @@ import message.request.KafkaRequestMessage;
 import message.response.KafkaApiVersionsResponseBody;
 import message.response.KafkaResponseHeader;
 import message.response.KafkaResponseMessage;
+import types.CompactArray;
 import types.Int16;
 import types.Int32;
-
-import java.util.List;
+import types.TagBuffer;
 
 public final class ApiVersionsHandler implements RequestHandler {
   @Override
@@ -17,17 +17,21 @@ public final class ApiVersionsHandler implements RequestHandler {
 
     if (apiVersion != 4) {
       return new KafkaResponseMessage(
-        new Int32(4 + 4 + 2),
-        new KafkaResponseHeader(new Int32(correlationId)),
-        new KafkaApiVersionsResponseBody(new Int16(35), List.of())
+        new Int32(0),
+        new KafkaResponseHeader(new Int32(correlationId), TagBuffer.EMPTY),
+        new KafkaApiVersionsResponseBody(
+          new Int16(35),
+          new CompactArray<>(new KafkaApiVersionsResponseBody.ApiKey[]{}),
+          new Int32(0),
+          TagBuffer.EMPTY)
       );
     }
 
     var body = buildBody();
 
     return new KafkaResponseMessage(
-      new Int32(4 + 4 + (2 + (2 + 2 + 2) * body.apiKeys().size())),
-      new KafkaResponseHeader(new Int32(correlationId)),
+      new Int32(0),
+      new KafkaResponseHeader(new Int32(correlationId), TagBuffer.EMPTY),
       body
     );
   }
@@ -35,9 +39,11 @@ public final class ApiVersionsHandler implements RequestHandler {
   private KafkaApiVersionsResponseBody buildBody() {
     return new KafkaApiVersionsResponseBody(
       new Int16(0),
-      List.of(new KafkaApiVersionsResponseBody.ApiKey(
-        new Int16(18), new Int16(0), new Int16(4)
-      ))
+      new CompactArray<>(new KafkaApiVersionsResponseBody.ApiKey[]{
+        new KafkaApiVersionsResponseBody.ApiKey(new Int16(18), new Int16(0), new Int16(4), TagBuffer.EMPTY)
+      }),
+      new Int32(0),
+      TagBuffer.EMPTY
     );
   }
 }
