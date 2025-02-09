@@ -13,9 +13,8 @@ public record KafkaResponseMessage(
     var bodyBytes = body.toBytes();
 
     return ToBytes.join(
-      new Int32(4 + headerBytes.length + bodyBytes.length).toBytes(),
+      new Int32(headerBytes.length + bodyBytes.length).toBytes(),
       headerBytes,
-      bodyBytes
-    );
+      bodyBytes);
   }
 }

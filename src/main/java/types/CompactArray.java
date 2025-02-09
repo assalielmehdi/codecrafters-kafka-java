@@ -8,7 +8,7 @@ public record CompactArray<V extends ToBytes>(V[] values) implements ToBytes {
   @Override
   public byte[] toBytes() {
     return ToBytes.join(
-      new Int8(values.length).toBytes(),
+      new Int8(values.length + 1).toBytes(),
       Arrays.stream(values)
         .map(ToBytes::toBytes)
         .reduce(new byte[0], ToBytes::join)

@@ -1,5 +1,7 @@
+import bytes.ToBytes;
 import handlers.RequestRouter;
 import message.request.KafkaRequestMessage;
+import types.Int32;
 
 import java.net.ServerSocket;
 
@@ -8,11 +10,15 @@ public class Main {
     var serverSocket = new ServerSocket(9092);
     var clientSocket = serverSocket.accept();
 
-    var requestBytes = clientSocket.getInputStream().readAllBytes();
+    var requestLengthBytes = clientSocket.getInputStream().readNBytes(4);
+    var requestBytes = ToBytes.join(
+      requestLengthBytes,
+      clientSocket.getInputStream().readNBytes(Int32.fromBytes(requestLengthBytes).value())
+    );
     var request = KafkaRequestMessage.fromBytes(requestBytes);
 
-    var responseMessage = new RequestRouter().route(request);
-    var responseBytes = responseMessage.toBytes();
+    var response = new RequestRouter().route(request);
+    var responseBytes = response.toBytes();
     clientSocket.getOutputStream().write(responseBytes);
 
     clientSocket.close();
