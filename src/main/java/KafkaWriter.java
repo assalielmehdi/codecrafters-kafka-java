@@ -3,6 +3,7 @@ import message.response.KafkaApiVersionsResponseBody;
 import message.response.KafkaResponseBody;
 import message.response.KafkaResponseHeader;
 import message.response.KafkaResponseMessage;
+import types.Int32;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,6 +26,10 @@ public class KafkaWriter {
       bytes.clear();
       writeHeader(message.header());
       writeBody(message.body());
+
+      bytes.addFirst(bytesWriterVisitor.visitInt32(new Int32(
+        bytes.stream().mapToInt(byteArray -> byteArray.length).sum() + 4
+      )));
 
       for (var byteArray : bytes) {
         outputStream.write(byteArray);
