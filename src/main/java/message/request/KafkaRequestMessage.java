@@ -7,7 +7,8 @@ public record KafkaRequestMessage(
   KafkaRequestHeader header,
   KafkaRequestBody body
 ) {
-  private static final int API_VERSIONS_REQUEST_API_KEY = 18;
+  public static final int API_VERSIONS_REQUEST_API_KEY = 18;
+  public static final int API_VERSIONS_DESCRIBE_TOPIC_PARTITIONS_VERSION = 75;
 
   public static KafkaRequestMessage fromBytes(byte[] bytes) {
     var messageLengthBytes = new byte[4];

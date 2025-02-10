@@ -19,7 +19,16 @@ public final class ApiVersionsHandler implements RequestHandler {
       case 4 -> new KafkaApiVersionsResponseBody(
         new Int16(0),
         new CompactArray<>(new KafkaApiVersionsResponseBody.ApiKey[]{
-          new KafkaApiVersionsResponseBody.ApiKey(new Int16(18), new Int16(0), new Int16(4))
+          new KafkaApiVersionsResponseBody.ApiKey(
+            new Int16(KafkaRequestMessage.API_VERSIONS_REQUEST_API_KEY),
+            new Int16(0),
+            new Int16(4)
+          ),
+          new KafkaApiVersionsResponseBody.ApiKey(
+            new Int16(KafkaRequestMessage.API_VERSIONS_DESCRIBE_TOPIC_PARTITIONS_VERSION),
+            new Int16(0),
+            new Int16(0)
+          )
         }),
         new Int32(100)
       );
