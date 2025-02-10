@@ -7,6 +7,7 @@ public record KafkaRequestMessage(
   KafkaRequestHeader header,
   KafkaRequestBody body
 ) {
+  public static final int API_VERSIONS_FETCH_API_KEY = 1;
   public static final int API_VERSIONS_REQUEST_API_KEY = 18;
   public static final int API_VERSIONS_DESCRIBE_TOPIC_PARTITIONS_VERSION = 75;
 
@@ -25,7 +26,10 @@ public record KafkaRequestMessage(
       Int32.fromBytes(messageLengthBytes),
       header,
       switch (header.requestApiKey().value()) {
+        // TODO
+        case API_VERSIONS_FETCH_API_KEY -> null;
         case API_VERSIONS_REQUEST_API_KEY -> KafkaApiVersionsRequestBody.fromBytes(bodyBytes);
+        case API_VERSIONS_DESCRIBE_TOPIC_PARTITIONS_VERSION -> null;
         default -> null;
       }
     );

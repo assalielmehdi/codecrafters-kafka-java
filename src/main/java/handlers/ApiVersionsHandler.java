@@ -16,9 +16,14 @@ public final class ApiVersionsHandler implements RequestHandler {
 
     var header = new KafkaResponseHeader(new Int32(correlationId));
     var body = switch (apiVersion) {
-      case 4 -> new KafkaApiVersionsResponseBody(
+      case 3, 4 -> new KafkaApiVersionsResponseBody(
         new Int16(0),
         new CompactArray<>(new KafkaApiVersionsResponseBody.ApiKey[]{
+          new KafkaApiVersionsResponseBody.ApiKey(
+            new Int16(KafkaRequestMessage.API_VERSIONS_FETCH_API_KEY),
+            new Int16(0),
+            new Int16(16)
+          ),
           new KafkaApiVersionsResponseBody.ApiKey(
             new Int16(KafkaRequestMessage.API_VERSIONS_REQUEST_API_KEY),
             new Int16(0),
